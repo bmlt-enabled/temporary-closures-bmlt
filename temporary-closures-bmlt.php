@@ -478,26 +478,9 @@ if (!class_exists("temporaryClosures")) {
                 $services_query .= '&services[]=' . $serviceBody;
             }
 
-            $ch = curl_init();
-            $cookie = ABSPATH . "cookie.txt";
-            curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_VERBOSE, false);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            if ( $this->options['unpublished'] == '1' ) {
-                curl_setopt($ch, CURLOPT_COOKIESESSION, TRUE);
-                curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
-                curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
-                $data = http_build_query(array('admin_action' => 'login', 'c_comdef_admin_login' => $this->options['bmlt_user'], 'c_comdef_admin_password' => urlencode($this->options['bmlt_pass']), '&'));
-                curl_setopt($ch, CURLOPT_URL, "$root_server/local_server/server_admin/xml.php?".$data);
-                curl_exec($ch);
-            }
-            curl_setopt($ch, CURLOPT_URL,$root_server . "/client_interface/json/?switcher=GetSearchResults" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
-
-            $results = curl_exec($ch);
-
-            $result = json_decode($results,true);
+            $results = $this->get_configured_root_server_request("/client_interface/json/?switcher=GetSearchResults" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
+            $body = wp_remote_retrieve_body($results);
+            $result = json_decode($body,true);
             return $result;
         }
 
@@ -750,22 +733,44 @@ if (!class_exists("temporaryClosures")) {
             return $time;
         }
 
-        public function auth_bmlt($username, $password, $master = false)
-        {
-            $ch = curl_init();
-            $cookie = ABSPATH . "master_cookie.txt";
-            $auth_endpoint = '/local_server/server_admin/xml.php';
-            curl_setopt($ch, CURLOPT_URL, $this->options['root_server'] . $auth_endpoint);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +yap');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, 'admin_action=login&c_comdef_admin_login='.$username.'&c_comdef_admin_password='.urlencode($password));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            $res = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-            return preg_match('/^OK$/', str_replace(array("\r", "\n"), '', $res)) == 1;
+        public function authenticate_root_server() {
+            $query_string = http_build_query(array(
+                'admin_action' => 'login',
+                'c_comdef_admin_login' => $this->options['bmlt_user'],
+                'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
+            return $this->get($this->options['root_server']."/local_server/server_admin/xml.php?" . $query_string);
+        }
+        public function requires_authentication() {
+            if ($this->options['unpublished'] == "1") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        public function get_root_server_request($url) {
+            $cookies = null;
+            if ($this->requires_authentication()) {
+                $auth_response = $this->authenticate_root_server();
+                $cookies = wp_remote_retrieve_cookies($auth_response);
+            }
+
+            return $this->get($url, $cookies);
+        }
+
+        public function get_configured_root_server_request($url) {
+            return $this->get_root_server_request($this->options['root_server']."/".$url);
+        }
+
+        public function get($url, $cookies = null) {
+            $args = array(
+                'timeout' => '120',
+                'headers' => array(
+                    'User-Agent' => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +bread'
+                ),
+                'cookies' => isset($cookies) ? $cookies : null
+            );
+
+            return wp_remote_get($url, $args);
         }
     }
     //End Class TemporaryClosures
