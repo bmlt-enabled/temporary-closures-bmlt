@@ -17,7 +17,7 @@ to view published or unpublished meetings.
 
 SHORTCODE
 Basic: [temporary_closures]
-Attributes: root_server, services, recursive, display_type, unpublished, custom_query
+Attributes: root_server, services, recursive, display_type, custom_query
 
 -- Shortcode parameters can be combined
 
@@ -33,22 +33,19 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 **services** to add multiple service bodies just separate by a comma.
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50,37,26&quot;]
 
-**grace_period** To add a grace period to meeting lookup add grace_period=&quot;15&quot; this would add a 15 minute grace period.
-Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; grace_period=&quot;15&quot;]
-
-**num_results** To limit the number of results add num_results=&quot;5&quot; this would limit results to 5.
-Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; state=&quot;1&quot; num_results=&quot;5&quot;]
-
-**display_type** To change the display type add display_type=&quot;table&quot; there are three different types **simple**, **table**, **block**
+**display_type** To change the display type add display_type=&quot;table&quot; there are three different types **table**, **block**
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; display_type=&quot;table&quot;]
+
+**custom_query** You can add a custom query from semantic api to filter results, for ex by format `&formats=54`.
+Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; custom_query=&quot;&formats=54&quot;]
 
 == EXAMPLES ==
 
-<a href="https://sca.charlestonna.org/upcoming-meetings/">https://sca.charlestonna.org/upcoming-meetings/</a>
+<a href="https://sca.charlestonna.org/upcoming-meetings/">https://sca.charlestonna.org/temporary-closures-bmlt/</a>
 
 == MORE INFORMATION ==
 
-<a href="https://github.com/pjaudiomv/upcoming-meetings-bmlt" target="_blank">https://github.com/pjaudiomv/upcoming-meetings-bmlt</a>
+<a href="https://github.com/bmlt-enabled/temporary-closures-bmlt" target="_blank">https://github.com/bmlt-enabled/temporary-closures-bmlt</a>
 
 
 == Installation ==
@@ -63,8 +60,6 @@ This section describes how to install the plugin and get it working.
 == Screenshots ==
 
 1. screenshot-1.png
-2. screenshot-2.png
-3. screenshot-3.png
 
 == Changelog ==
 

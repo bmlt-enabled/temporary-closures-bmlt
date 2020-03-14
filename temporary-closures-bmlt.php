@@ -3,7 +3,7 @@
 Plugin Name: Temporary Closures BMLT
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Author: pjaudiomv
-Description: This plugin returns all unique towns or counties for given service body on your site Simply add [list_locations] shortcode to your page and set shortcode attributes accordingly. Required attributes are root_server and services.
+Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
 Version: 1.0.0
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
@@ -88,7 +88,7 @@ if (!class_exists("temporaryClosures")) {
          */
         public function enqueueBackendFiles($hook)
         {
-            if ($hook == 'settings_page_temporary-closures') {
+            if ($hook == 'settings_page_temporary-closures-bmlt') {
                 wp_enqueue_style('temporary-closures-admin-ui-css', plugins_url('css/redmond/jquery-ui.css', __FILE__), false, '1.11.4', false);
                 wp_enqueue_style("chosen", plugin_dir_url(__FILE__) . "css/chosen.min.css", false, "1.2", 'all');
                 wp_enqueue_script("chosen", plugin_dir_url(__FILE__) . "js/chosen.jquery.min.js", array('jquery'), "1.2", true);

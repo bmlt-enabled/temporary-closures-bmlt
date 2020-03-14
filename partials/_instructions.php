@@ -5,7 +5,7 @@
     <div>
         <p>[temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;12&quot;]</p>
         <p>Multiple service bodies can be added seperated by a comma like so services=&quot;12,14,15&quot;</p>
-        <strong>Attributes:</strong> root_server, services, recursive, display_type, time_format, weekday_language
+        <strong>Attributes:</strong> root_server, services, recursive, display_type, custom_query
         <p><strong>Shortcode parameters can be combined.</strong></p>
     </div>
     <h3 class="help-accordian"><strong>Shortcode Attributes</strong></h3>
@@ -16,6 +16,7 @@
         <p><strong>recursive</strong></p>
         <p><strong>display_type</strong></p>
         <p><strong>time_format</strong></p>
+        <p><strong>custom_query</strong></p>
         <p><strong>weekday_language</strong></p>
         <p>A minimum of root_server, and services attribute are required, which would return all towns for that service body seperated by a comma.</p>
         <p>Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot;]</p>
@@ -43,6 +44,12 @@
         <p><strong>display_type</strong></p>
         <p>To change the display type add display_type="table" there are three different types <strong>simple</strong>, <strong>table</strong>, <strong>block</strong></p>
         <p>Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; display_type=&quot;table"]</p>
+    </div>
+    <h3 class="help-accordian"><strong>&nbsp;&nbsp;&nbsp;&nbsp;- custom_query</strong></h3>
+    <div>
+        <p><strong>custom_query</strong></p>
+        <p>You can add a custom query from semantic api to filter results, for ex by format `&formats=54`.</p>
+        <p>Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; custom_query=&quot;&formats=54"]</p>
     </div>
     <h3 class="help-accordian"><strong>&nbsp;&nbsp;&nbsp;&nbsp;- weekday_language</strong></h3>
     <div>
