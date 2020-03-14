@@ -1,0 +1,40 @@
+[Sat Mar 14 01:22:02.101490 2020] [ssl:warn] [pid 1] AH01909: 192.168.16.3:443:0 server certificate does NOT include an ID which matches the server name
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.16.3. Set the 'ServerName' directive globally to suppress this message
+[Sat Mar 14 01:22:02.147614 2020] [ssl:warn] [pid 1] AH01909: 192.168.16.3:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Mar 14 01:22:02.151576 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.26 OpenSSL/1.1.1d configured -- resuming normal operations
+[Sat Mar 14 01:22:02.152087 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+sh: 1: -t: not found
+[Sat Mar 14 02:27:52.440276 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[Sat Mar 14 02:28:13.361666 2020] [ssl:warn] [pid 1] AH01909: 192.168.16.3:443:0 server certificate does NOT include an ID which matches the server name
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.16.3. Set the 'ServerName' directive globally to suppress this message
+[Sat Mar 14 02:28:13.410081 2020] [ssl:warn] [pid 1] AH01909: 192.168.16.3:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Mar 14 02:28:13.413509 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.26 OpenSSL/1.1.1d configured -- resuming normal operations
+[Sat Mar 14 02:28:13.413977 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[14-Mar-2020 02:41:55 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method temporaryClosures::auth_v1() in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php:338
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(288): temporaryClosures->adminOptionsPage('')
+#1 /var/www/html/wp-includes/class-wp-hook.php(312): WP_Hook->apply_filters('', Array)
+#2 /var/www/html/wp-includes/plugin.php(478): WP_Hook->do_action(Array)
+#3 /var/www/html/wp-admin/admin.php(254): do_action('settings_page_t...')
+#4 /var/www/html/wp-admin/options-general.php(10): require_once('/var/www/html/w...')
+#5 {main}
+  thrown in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php on line 338
+sh: 1: -t: not found
+[14-Mar-2020 02:42:27 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method temporaryClosures::auth_v1() in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php:338
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(288): temporaryClosures->adminOptionsPage('')
+#1 /var/www/html/wp-includes/class-wp-hook.php(312): WP_Hook->apply_filters('', Array)
+#2 /var/www/html/wp-includes/plugin.php(478): WP_Hook->do_action(Array)
+#3 /var/www/html/wp-admin/admin.php(254): do_action('settings_page_t...')
+#4 /var/www/html/wp-admin/options-general.php(10): require_once('/var/www/html/w...')
+#5 {main}
+  thrown in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php on line 338
+[14-Mar-2020 02:42:55 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method temporaryClosures::auth_v1() in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php:338
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(288): temporaryClosures->adminOptionsPage('')
+#1 /var/www/html/wp-includes/class-wp-hook.php(312): WP_Hook->apply_filters('', Array)
+#2 /var/www/html/wp-includes/plugin.php(478): WP_Hook->do_action(Array)
+#3 /var/www/html/wp-admin/admin.php(254): do_action('settings_page_t...')
+#4 /var/www/html/wp-admin/options-general.php(10): require_once('/var/www/html/w...')
+#5 {main}
+  thrown in /var/www/html/wp-content/plugins/temporary-closures-bmlt/temporary-closures-bmlt.php on line 338
