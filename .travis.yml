@@ -23,7 +23,7 @@ jobs:
     - DIST_DIR_GITHUB=dist/github
     - GITHUB_RELEASE_FILENAME=temporary-closures-bmlt.zip
     - PLUGIN="temporary-closures-bmlt"
-    - MAINFILE="temporary-closures.php"
+    - MAINFILE="temporary-closures-bmlt.php"
     script:
     - find ./ -type d | xargs chmod 755
     - find ./ -name '*.php' | xargs chmod 644
