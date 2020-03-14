@@ -489,7 +489,7 @@ if (!class_exists("temporaryClosures")) {
                 curl_setopt($ch, CURLOPT_COOKIESESSION, TRUE);
                 curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
                 curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
-                $data = http_build_query(array('admin_action' => 'login', 'c_comdef_admin_login' => $this->options['bmlt_user'], 'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
+                $data = http_build_query(array('admin_action' => 'login', 'c_comdef_admin_login' => $this->options['bmlt_user'], 'c_comdef_admin_password' => urlencode($this->options['bmlt_pass']), '&'));
                 curl_setopt($ch, CURLOPT_URL, "$root_server/local_server/server_admin/xml.php?".$data);
                 curl_exec($ch);
             }
