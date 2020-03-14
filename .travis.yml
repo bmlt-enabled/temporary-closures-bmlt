@@ -4,9 +4,9 @@ php:
 - '7.1'
 env:
   global:
-  - ZIP_FILENAME=upcoming-meetings-bmlt-build${TRAVIS_BUILD_NUMBER}-${TRAVIS_COMMIT}.zip
+  - ZIP_FILENAME=temporary-closures-bmlt-build${TRAVIS_BUILD_NUMBER}-${TRAVIS_COMMIT}.zip
   - S3_BUCKET=archives.bmlt.app
-  - S3_KEY=upcoming-meetings-bmlt
+  - S3_KEY=temporary-closures-bmlt
 jobs:
   include:
 
@@ -21,9 +21,9 @@ jobs:
     - BUILD_DIR=build
     - DIST_DIR_S3=dist/s3
     - DIST_DIR_GITHUB=dist/github
-    - GITHUB_RELEASE_FILENAME=upcoming-meetings-bmlt.zip
-    - PLUGIN="upcoming-meetings-bmlt"
-    - MAINFILE="upcoming-meetings.php"
+    - GITHUB_RELEASE_FILENAME=temporary-closures-bmlt.zip
+    - PLUGIN="temporary-closures-bmlt"
+    - MAINFILE="temporary-closures.php"
     script:
     - find ./ -type d | xargs chmod 755
     - find ./ -name '*.php' | xargs chmod 644
@@ -37,7 +37,7 @@ jobs:
     - provider: s3
       access_key_id: AKIAI7JHYFA6DI3WYP5A
       secret_access_key:
-        secure: pdofPn+jOokXRva+z9xzvly2fROItTDl15gsBSXbNTHmL7TfKEBQ0r5MuiTKJT9vSwIQxZ0Y+97doSKZUoznHByO6bsyrqpk7DPUzXSkV6/7zmDjkxSRPbkwId3Hnb4MFZhPgX3gMLdV3RKIbLEqbfEdp+nxr+oos2b+EwAYsqnAe9t2wBFeYKrFk9EV1Kgb7g90RRhg10uehOfrOucXGVznMGUucUpYZbC3Iu2LTT1XhRcNr2UYcrRNGlmXNFB3usiMPGOKpreriMuoLF35jvPPgGjiLbVqX+RXUazM+yqYziLppoeysgoRFB6VHCU4EgM4by9xY8dEaoNoTScjBcNq6wPYovj4RELbD3DfMk4+8eu8mTpru1NPUfH7HJ8zFAMSLpAV4UmnEAqXDu2M04L+tLktwfEr/q9CWWnKGmbExqdnxarVlS8qsTIXh3rxReQ97jAHuQOKOer8hmO8rwH5eDqp1bSQA/iEWAPZNPhfo0bZWZlQi1yWo1NCyNX+a1mDKN/BXD0i69BTIF/WgZtvVF2OsO+vcdXZV09N2nLQoPmrbGFhN0RvcmVbSWiHLxwCkSYFq+MdbRdEkyIhjU4XM+u0PDsstCA083FN203WP1AFBDKCOCmlJeh3eLhffsJm69mAnF9y43X26czS/3/d6hTz47dcDyvL5MSadmo=
+        secure: 5ctNdk0SdPsVg8DglqBBJxso0cKqtfRYgBkizK+0KysLFbAzHL3ZlwaODl8hcKSicYz5isuRSsQFQ1/kl24PFayHK52tsExKxyGjQJKQoiAzaEzTumAArto1U7EOVQPvk/g9Z0z2J99QQL9WOrXbPeYlWPEs7jOq31kIw818tEz8H3fyWR0k+/VgTO7D+3JuFUe7Tk4+QsQF/m1bYD4+HsuQ2Baew9OgEvpnHWCZavsZijqYkzpab2rjba4ogVVOBp37Ckntn3C8SI3Dka4iv4ya1w/5KdX6zxaQKenmF++l2SkM78QIKjEC949vSo2Z7QPYym9ZhXHWcyf4HH0B/D102LLtFPdR+he+fW/ZhcelvCb+SY6oPK4gJlxU3hIvn9GhNIimTZGVAeSivGDqt6YC7PnMLUHSLTlShMcta0NNLXS2rclnz936fFdJfwfdgB13fHdkoojO3k2XGPRXqwF1hLbkzo+j0/xUwaHBG/U0AGQigfL5xgLHX7vWI4gvaMvkIUGYpgAs7E+b8X0d2PUU5QMSzBRBmRRUAFKqoRhr/eh0ADkftccZN+lODzmwsmL8K2NBCGJSdvWy+xD9y/iVR9Cu35A69ysDGKX6mnIExxenfoGb98+NZBQla00kmNMAtbwLh5TzE8FlA2vNz8o8AcKtUbAJMhyoa8zzg3k=
       bucket: "$S3_BUCKET"
       local_dir: "$DIST_DIR_S3"
       upload-dir: "$S3_KEY"
