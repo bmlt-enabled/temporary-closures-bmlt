@@ -479,9 +479,16 @@ if (!class_exists("temporaryClosures")) {
             }
 
             $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=location_municipality,weekday_tinyint,start_time" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
-            $body = wp_remote_retrieve_body($results);
-            $result = json_decode($body, true);
-            return $result;
+
+            if ($this->options['unpublished'] == "1") {
+                $final_results = $this->filterUnpublished($results);
+            } else {
+                $final_results = $results;
+            }
+
+            $body = wp_remote_retrieve_body($final_results);
+
+            return json_decode($body, true);
         }
 
         /*******************************************************************/
@@ -726,6 +733,11 @@ if (!class_exists("temporaryClosures")) {
             }
 
             return $time;
+        }
+
+        public function filterUnpublished($meetings)
+        {
+            return $meetings;
         }
 
         public function authenticateRootServer()

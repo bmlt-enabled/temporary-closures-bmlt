@@ -1,7 +1,7 @@
 === Temporary Closures BMLT ===
 
-Contributors: pjaudiomv
-Plugin URI: https://wordpress.org/plugins/upcoming-meetings-bmlt/
+Contributors: pjaudiomv, bmltenabled
+Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Tags: bmlt, basic meeting list toolbox, Temporary Closures, Temporary Closures BMLT, narcotics anonymous, na
 Requires at least: 4.0
 Requires PHP: 5.6
@@ -12,11 +12,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures.
+Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used
+to view published or unpublished meetings.
 
 SHORTCODE
 Basic: [temporary_closures]
-Attributes: root_server, services, recursive, display_type, format
+Attributes: root_server, services, recursive, display_type, unpublished, custom_query
 
 -- Shortcode parameters can be combined
 
@@ -29,7 +30,7 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 **recursive** to recurse service bodies add recursive=&quot;1&quot;
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; recursive=&quot;1&quot;]
 
-**services** to add multiple service bodies just seperate by a comma.
+**services** to add multiple service bodies just separate by a comma.
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50,37,26&quot;]
 
 **grace_period** To add a grace period to meeting lookup add grace_period=&quot;15&quot; this would add a 15 minute grace period.
