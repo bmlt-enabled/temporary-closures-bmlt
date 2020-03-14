@@ -478,9 +478,9 @@ if (!class_exists("temporaryClosures")) {
                 $services_query .= '&services[]=' . $serviceBody;
             }
 
-            $results = $this->get_configured_root_server_request("/client_interface/json/?switcher=GetSearchResults" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
+            $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=location_municipality,weekday_tinyint,start_time" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
             $body = wp_remote_retrieve_body($results);
-            $result = json_decode($body,true);
+            $result = json_decode($body, true);
             return $result;
         }
 
@@ -733,39 +733,44 @@ if (!class_exists("temporaryClosures")) {
             return $time;
         }
 
-        public function authenticate_root_server() {
+        public function authenticateRootServer()
+        {
             $query_string = http_build_query(array(
                 'admin_action' => 'login',
                 'c_comdef_admin_login' => $this->options['bmlt_user'],
                 'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
             return $this->get($this->options['root_server']."/local_server/server_admin/xml.php?" . $query_string);
         }
-        public function requires_authentication() {
+        public function requiresAuthentication()
+        {
             if ($this->options['unpublished'] == "1") {
                 return true;
             } else {
                 return false;
             }
         }
-        public function get_root_server_request($url) {
+        public function getRooServerRequest($url)
+        {
             $cookies = null;
-            if ($this->requires_authentication()) {
-                $auth_response = $this->authenticate_root_server();
+            if ($this->requiresAuthentication()) {
+                $auth_response = $this->authenticateRootServer();
                 $cookies = wp_remote_retrieve_cookies($auth_response);
             }
 
             return $this->get($url, $cookies);
         }
 
-        public function get_configured_root_server_request($url) {
-            return $this->get_root_server_request($this->options['root_server']."/".$url);
+        public function getConfiguredRootServerRequest($url)
+        {
+            return $this->getRooServerRequest($this->options['root_server']."/".$url);
         }
 
-        public function get($url, $cookies = null) {
+        public function get($url, $cookies = null)
+        {
             $args = array(
                 'timeout' => '120',
                 'headers' => array(
-                    'User-Agent' => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +bread'
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0'
                 ),
                 'cookies' => isset($cookies) ? $cookies : null
             );
