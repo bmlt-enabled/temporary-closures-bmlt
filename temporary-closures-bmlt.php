@@ -623,7 +623,6 @@ if (!class_exists("temporaryClosures")) {
                                 }
 
                                 $name = htmlspecialchars(trim(stripslashes($meeting['meeting_name'])));
-                                $format = htmlspecialchars(trim(stripslashes($meeting['formats'])));
 
                                 $name_uri = urlencode(htmlspecialchars_decode($name));
 
@@ -683,10 +682,6 @@ if (!class_exists("temporaryClosures")) {
 
                                     $ret .= $in_block ? '<div class="bmlt_simple_meeting_one_meeting_address_div">' : '<td class="bmlt_simple_meeting_one_meeting_address_td">';
                                     $ret .= '<a href="'.$map_uri.'">'.$address.'</a>';
-                                    $ret .= $in_block ? '</div>' : '</td>';
-
-                                    $ret .= $in_block ? '<div class="bmlt_simple_meeting_one_meeting_format_div">' : '<td class="bmlt_simple_meeting_one_meeting_format_td">';
-                                    $ret .= $format;
                                     $ret .= $in_block ? '</div>' : '</td>';
 
                                     $ret .= $in_block ? '<div class="bmlt_clear_div"></div></div>' : '</tr>';
