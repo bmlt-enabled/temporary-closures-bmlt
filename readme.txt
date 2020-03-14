@@ -41,7 +41,7 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 
 == EXAMPLES ==
 
-<a href="https://sca.charlestonna.org/upcoming-meetings/">https://sca.charlestonna.org/temporary-closures-bmlt/</a>
+<a href="https://sca.charlestonna.org/temporary-closures-bmlt/">https://sca.charlestonna.org/temporary-closures-bmlt/</a>
 
 == MORE INFORMATION ==
 
