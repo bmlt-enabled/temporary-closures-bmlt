@@ -55,7 +55,7 @@ This section describes how to install the plugin and get it working.
 1. Download and install the plugin from WordPress dashboard. You can also upload the entire Temporary Closures BMLT Plugin folder to the /wp-content/plugins/ directory
 2. Activate the plugin through the Plugins menu in WordPress
 3. Add [temporary_closures] shortcode to your WordPress page/post.
-4. At a minimum assign root_server, services and timezone attributes.
+4. At a minimum assign root_server, and services attributes.
 
 == Screenshots ==
 
