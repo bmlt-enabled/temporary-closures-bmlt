@@ -168,10 +168,6 @@ if (!class_exists("temporaryClosures")) {
             }
 
             $output = '';
-            $css_um = $this->options['custom_css_um'];
-
-            $output .= "<style type='text/css'>$css_um</style>";
-
 
             $meeting_results = $this->getMeetingsJson($services, $recursive, $custom_query, $unpublished);
 
@@ -253,7 +249,6 @@ if (!class_exists("temporaryClosures")) {
                 $this->options['display_type_dropdown']      = sanitize_text_field($_POST['display_type_dropdown']);
                 $this->options['time_format_dropdown']       = sanitize_text_field($_POST['time_format_dropdown']);
                 $this->options['weekday_language_dropdown']  = sanitize_text_field($_POST['weekday_language_dropdown']);
-                $this->options['custom_css_um']              = $_POST['custom_css_um'];
 
                 $this->saveAdminOptions();
                 echo '<div class="updated"><p>Success! Your changes were successfully saved!</p></div>';
@@ -396,15 +391,6 @@ if (!class_exists("temporaryClosures")) {
                                     <label for="location_text">Show Location Text (for simple display)</label>
                                 </li>
                             <?php } ?>
-                        </ul>
-                    </div>
-                    <div style="padding: 0 15px;" class="postbox">
-                        <h3>Custom CSS</h3>
-                        <p>Allows for custom styling of Temporary Closures.</p>
-                        <ul>
-                            <li>
-                                <textarea id="custom_css_um" name="custom_css_um" cols="100" rows="10"><?php echo $this->options['custom_css_um']; ?></textarea>
-                            </li>
                         </ul>
                     </div>
                     <input type="submit" value="SAVE CHANGES" name="temporaryclosuressave" class="button-primary" />
