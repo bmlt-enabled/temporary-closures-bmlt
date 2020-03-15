@@ -6,7 +6,7 @@ Tags: bmlt, basic meeting list toolbox, Temporary Closures, Temporary Closures B
 Requires at least: 4.0
 Requires PHP: 5.6
 Tested up to: 5.3.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ to view published or unpublished meetings.
 
 SHORTCODE
 Basic: [temporary_closures]
-Attributes: root_server, services, recursive, display_type, custom_query
+Attributes: root_server, services, recursive, display_type, custom_query, sortby
 
 -- Shortcode parameters can be combined
 
@@ -38,6 +38,9 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 
 **custom_query** You can add a custom query from semantic api to filter results, for ex by format `&formats=54`.
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; custom_query=&quot;&formats=54&quot;]
+
+**sortby** Allows you to use custom sort keys, the default is `location_municipality,weekday_tinyint,start_time`.
+Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; sortby=&quot;weekday_tinyint,location_municipality,start_time&quot;]
 
 == EXAMPLES ==
 

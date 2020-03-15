@@ -15,7 +15,7 @@ SHORTCODE
 
 Basic: [temporary_closures]
 
-Attributes: root_server, services, recursive, display_type, custom_query
+Attributes: root_server, services, recursive, display_type, custom_query, sortby
 
 -- Shortcode parameters can be combined
 
@@ -38,6 +38,9 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 **custom_query** You can add a custom query from semantic api to filter results, for ex by format `&formats=54`.
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; custom_query=&quot;&formats=54&quot;]
 
+**sortby** Allows you to use custom sort keys, the default is `location_municipality,weekday_tinyint,start_time`.
+Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; sortby=&quot;weekday_tinyint,location_municipality,start_time&quot;]
+
 
 ## EXAMPLES
 
@@ -55,6 +58,10 @@ This section describes how to install the plugin and get it working.
 
 
 ## Changelog
+
+### 1.1.0
+
+* Added custom sort option `sortby`.
 
 ### 1.0.1
 

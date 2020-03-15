@@ -4,7 +4,7 @@ Plugin Name: Temporary Closures BMLT
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.0.0
+Version: 1.1.0
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -136,7 +136,8 @@ if (!class_exists("temporaryClosures")) {
                     'time_format'       => '',
                     'weekday_language'  => '',
                     'unpublished'       => '',
-                    'custom_query'      => ''
+                    'custom_query'      => '',
+                    'sortby'            => ''
                 ),
                 $atts
             );
@@ -149,6 +150,7 @@ if (!class_exists("temporaryClosures")) {
             $recursive            = ($args['recursive']         != '' ? $args['recursive']         : $this->options['recursive']);
             $unpublished          = ($args['unpublished']       != '' ? $args['unpublished']       : $this->options['unpublished']);
             $custom_query         = ($args['custom_query']      != '' ? $args['custom_query']      : $this->options['custom_query']);
+            $sortby               = ($args['sortby']            != '' ? $args['sortby']            : $this->options['sortby']);
             $display_type         = ($args['display_type']      != '' ? $args['display_type']      : $this->options['display_type_dropdown']);
             $time_format          = ($args['time_format']       != '' ? $args['time_format']       : $this->options['time_format_dropdown']);
             $weekday_language     = ($args['weekday_language']  != '' ? $args['weekday_language']  : $this->options['weekday_language_dropdown']);
@@ -169,7 +171,7 @@ if (!class_exists("temporaryClosures")) {
 
             $output = '';
 
-            $meeting_results = $this->getMeetingsJson($services, $recursive, $custom_query, $unpublished);
+            $meeting_results = $this->getMeetingsJson($services, $recursive, $custom_query, $unpublished, $sortby);
 
             if ($time_format == '24') {
                 $out_time_format = 'G:i';
@@ -243,6 +245,7 @@ if (!class_exists("temporaryClosures")) {
                 $this->options['service_body_dropdown']      = sanitize_text_field($_POST['service_body_dropdown']);
                 $this->options['recursive']                  = sanitize_text_field($_POST['recursive']);
                 $this->options['unpublished']                = sanitize_text_field($_POST['unpublished']);
+                $this->options['sortby']                     = sanitize_text_field($_POST['sortby']);
                 $this->options['bmlt_user']                  = sanitize_text_field($_POST['bmlt_user']);
                 $this->options['bmlt_pass']                  = sanitize_text_field($_POST['bmlt_pass']);
                 $this->options['custom_query']               = sanitize_text_field($_POST['custom_query']);
@@ -316,6 +319,15 @@ if (!class_exists("temporaryClosures")) {
                         <ul>
                             <li>
                                 <input type="text" id="custom_query" name="custom_query" value="<?php echo $this->options['custom_query']; ?>">
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="padding: 0 15px;" class="postbox">
+                        <h3>Custom Sort</h3>
+                        <p>Default sort keys are: location_municipality,weekday_tinyint,start_time</p>
+                        <ul>
+                            <li>
+                                <input type="text" id="sortby" name="sortby" value="<?php echo $this->options['sortby']; ?>">
                             </li>
                         </ul>
                     </div>
@@ -433,6 +445,7 @@ if (!class_exists("temporaryClosures")) {
                     'time_format'               => '12',
                     'weekday_language_dropdown' => 'en',
                     'unpublished'               => '',
+                    'sortby'                    => 'location_municipality,weekday_tinyint,start_time',
                     'bmlt_user'                 => '',
                     'bmlt_pass'                 => ''
                 );
@@ -457,7 +470,7 @@ if (!class_exists("temporaryClosures")) {
          * @param $recursive
          * @return array
          */
-        public function getMeetingsJson($services, $recursive, $custom_query, $unpublished)
+        public function getMeetingsJson($services, $recursive, $custom_query, $unpublished, $sortby)
         {
             $serviceBodies = explode(',', $services);
             $services_query = '';
@@ -465,7 +478,7 @@ if (!class_exists("temporaryClosures")) {
                 $services_query .= '&services[]=' . $serviceBody;
             }
 
-            $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=location_municipality,weekday_tinyint,start_time" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
+            $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=$sortby" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
             $body = wp_remote_retrieve_body($results);
             $results_json = json_decode($body, true);
 
