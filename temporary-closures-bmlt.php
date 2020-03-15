@@ -147,6 +147,7 @@ if (!class_exists("temporaryClosures")) {
             $root_server          = ($args['root_server']       != '' ? $args['root_server']       : $this->options['root_server']);
             $services             = ($args['services']          != '' ? $args['services']          : $services_dropdown);
             $recursive            = ($args['recursive']         != '' ? $args['recursive']         : $this->options['recursive']);
+            $unpublished          = ($args['unpublished']       != '' ? $args['unpublished']       : $this->options['unpublished']);
             $custom_query         = ($args['custom_query']      != '' ? $args['custom_query']      : $this->options['custom_query']);
             $display_type         = ($args['display_type']      != '' ? $args['display_type']      : $this->options['display_type_dropdown']);
             $time_format          = ($args['time_format']       != '' ? $args['time_format']       : $this->options['time_format_dropdown']);
@@ -172,7 +173,7 @@ if (!class_exists("temporaryClosures")) {
             $output .= "<style type='text/css'>$css_um</style>";
 
 
-            $meeting_results = $this->getMeetingsJson($root_server, $services, $recursive, $custom_query);
+            $meeting_results = $this->getMeetingsJson($services, $recursive, $custom_query, $unpublished);
 
             if ($time_format == '24') {
                 $out_time_format = 'G:i';
@@ -470,7 +471,7 @@ if (!class_exists("temporaryClosures")) {
          * @param $recursive
          * @return array
          */
-        public function getMeetingsJson($root_server, $services, $recursive, $custom_query)
+        public function getMeetingsJson($services, $recursive, $custom_query, $unpublished)
         {
             $serviceBodies = explode(',', $services);
             $services_query = '';
@@ -482,7 +483,7 @@ if (!class_exists("temporaryClosures")) {
             $body = wp_remote_retrieve_body($results);
             $results_json = json_decode($body, true);
 
-            if ($this->options['unpublished'] == "1") {
+            if ($unpublished == "1") {
                 $final_results = $this->filterUnpublished($results_json);
             } else {
                 $final_results = $results_json;
