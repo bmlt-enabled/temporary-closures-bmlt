@@ -441,7 +441,7 @@ if (!class_exists("temporaryClosures")) {
                     "root_server"               => '',
                     "service_body_dropdown"     => '',
                     'recursive'                 => '1',
-                    'display_type_dropdown'     => 'simple',
+                    'display_type_dropdown'     => 'table',
                     'time_format'               => '12',
                     'weekday_language_dropdown' => 'en',
                     'unpublished'               => '',
@@ -465,13 +465,18 @@ if (!class_exists("temporaryClosures")) {
         }
 
         /**
-         * @param $root_server
          * @param $services
          * @param $recursive
+         * @param $custom_query
+         * @param $unpublished
+         * @param $sortby
          * @return array
          */
         public function getMeetingsJson($services, $recursive, $custom_query, $unpublished, $sortby)
         {
+            if (empty($sortby)) {
+                $sortby = 'location_municipality,weekday_tinyint,start_time';
+            }
             $serviceBodies = explode(',', $services);
             $services_query = '';
             foreach ($serviceBodies as $serviceBody) {
