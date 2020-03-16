@@ -4,7 +4,7 @@ Plugin Name: Temporary Closures BMLT
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.1.0
+Version: 1.1.1
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -636,10 +636,6 @@ if (!class_exists("temporaryClosures")) {
 
                                 $name = htmlspecialchars(trim(stripslashes($meeting['meeting_name'])));
 
-                                $name_uri = urlencode(htmlspecialchars_decode($name));
-
-                                $map_uri = str_replace("##LONG##", htmlspecialchars($meeting['longitude']), str_replace("##LAT##", htmlspecialchars($meeting['latitude']), str_replace("##NAME##", $name_uri, 'https://maps.google.com/maps?q=##LAT##,##LONG##+(##NAME##)&amp;ll=##LAT##,##LONG##')));
-
                                 if ($time && $weekday && $address) {
                                     $meeting_weekday = $meeting['weekday_tinyint'];
 
@@ -668,18 +664,10 @@ if (!class_exists("temporaryClosures")) {
                                     $ret .= $in_block ? '</div>' : '</td>';
                                     $ret .= $in_block ? '<div class="bmlt_simple_meeting_one_meeting_name_div">' : '<td class="bmlt_simple_meeting_one_meeting_name_td">';
 
-                                    if (isset($single_uri) && $single_uri) {
-                                        $ret .= '<a href="'.htmlspecialchars($single_uri).intval($meeting['id_bigint']).'">';
-                                    }
-
                                     if ($name) {
                                         $ret .= $name;
                                     } else {
                                         $ret .= 'NA Meeting';
-                                    }
-
-                                    if (isset($single_uri) && $single_uri) {
-                                        $ret .= '</a>';
                                     }
 
                                     $ret .= $in_block ? '</div>' : '</td>';
@@ -693,7 +681,7 @@ if (!class_exists("temporaryClosures")) {
                                     $ret .= $in_block ? '</div>' : '</td>';
 
                                     $ret .= $in_block ? '<div class="bmlt_simple_meeting_one_meeting_address_div">' : '<td class="bmlt_simple_meeting_one_meeting_address_td">';
-                                    $ret .= '<a href="'.$map_uri.'">'.$address.'</a>';
+                                    $ret .= $address;
                                     $ret .= $in_block ? '</div>' : '</td>';
 
                                     $ret .= $in_block ? '<div class="bmlt_clear_div"></div></div>' : '</tr>';
