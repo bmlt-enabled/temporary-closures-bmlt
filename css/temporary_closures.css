@@ -111,3 +111,7 @@ div#temporary_closures_div div.bmlt_simple_meeting_one_meeting_format_div
 {
 	width:10%;
 }
+
+div#temporary_closures_div {
+	overflow-x: auto;
+}
