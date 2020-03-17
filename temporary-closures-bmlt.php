@@ -483,17 +483,10 @@ if (!class_exists("temporaryClosures")) {
                 $services_query .= '&services[]=' . $serviceBody;
             }
 
-            $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=$sortby" .$services_query . ($recursive == "1" ? "&recursive=1" : "") . $custom_query . "&advanced_published=0");
+            $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=$sortby" .$services_query . $custom_query . ($recursive == "1" ? "&recursive=1" : "") . ($unpublished == "1" ? "&advanced_published=-1" : ""));
             $body = wp_remote_retrieve_body($results);
-            $results_json = json_decode($body, true);
 
-            if ($unpublished == "1") {
-                $final_results = $this->filterUnpublished($results_json);
-            } else {
-                $final_results = $results_json;
-            }
-
-            return $final_results;
+            return json_decode($body, true);
         }
 
         /*******************************************************************/
@@ -728,24 +721,13 @@ if (!class_exists("temporaryClosures")) {
             return $time;
         }
 
-        public function filterUnpublished($meetings)
-        {
-            $filteredArray = array();
-            foreach ($meetings as $meeting) {
-                if ($meeting["published"] == "0") {
-                    $filteredArray[] = $meeting;
-                }
-            }
-            return $filteredArray;
-        }
-
         public function authenticateRootServer()
         {
             $query_string = http_build_query(array(
                 'admin_action' => 'login',
                 'c_comdef_admin_login' => $this->options['bmlt_user'],
                 'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
-            return $this->get($this->options['root_server']."/local_server/server_admin/xml.php?" . $query_string);
+            return $this->get($this->options['root_server']."/local_server/server_admin/json.php?" . $query_string);
         }
         public function requiresAuthentication()
         {
