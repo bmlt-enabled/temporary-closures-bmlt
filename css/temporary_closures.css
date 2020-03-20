@@ -124,8 +124,8 @@ table.dataTable tbody, thead {
 	text-align: right;
 	padding: 6px;
 }
-table.dataTable thead {
-	color: #000;
+table.dataTable thead tr {
+	color: #1cb2f5;
 	background-color: #fff;
 	opacity: 0.9;
 }

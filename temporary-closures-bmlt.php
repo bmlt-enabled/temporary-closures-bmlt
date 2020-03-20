@@ -189,6 +189,10 @@ if (!class_exists("temporaryClosures")) {
                 $output .= '<script type="text/javascript">
                         jQuery(document).ready(function(){
                             jQuery("#temp_closures_dt").DataTable({
+                                language: {
+                                    search: "",
+                                    searchPlaceholder: "Search Closed Meetings"
+                                },
                                 "order": [[ 0, "asc" ]],
                                 "paging": false,
                                 "scrollY": "500px",
@@ -525,27 +529,34 @@ if (!class_exists("temporaryClosures")) {
             $in_time_format = null,  // Time format
             $days_of_the_week = null
         ) {
-
-
+            $bmlt_search_endpoint =  $this->get($this->options['root_server'] . "/client_interface/json/?switcher=GetServiceBodies");
+            $serviceBodies = json_decode(wp_remote_retrieve_body($bmlt_search_endpoint));
 
             $ret = '';
             $ret .= '<table id="temp_closures_dt"  class="tem_closures_display" style="width:95%">';
             $ret .= '<thead id="temp_closures_head">';
             $ret .= '<tr>';
-            $ret .= '<td id="temp_closures_day_header" class="selected"><a href="#">Day</a></td>';
-            $ret .= '<td id="temp_closures_time_header"><a href="#">Time</a></td>';
-            $ret .= '<td id="temp_closures_area_header"><a href="#">Area</a></td>';
-            $ret .= '<td id="temp_closures_name_header"><a href="#">Meeting Name</a></td>';
-            $ret .= '<td id="temp_closures_address_header"><a href="#">Address</a></td>';
+            $ret .= '<td id="temp_closures_day_header" class="selected">Day</td>';
+            $ret .= '<td id="temp_closures_time_header">Time</td>';
+            $ret .= '<td id="temp_closures_area_header">Area</td>';
+            $ret .= '<td id="temp_closures_name_header">Meeting Name</td>';
+            $ret .= '<td id="temp_closures_address_header">Address</td>';
             $ret .= '</tr>';
             $ret .= '</thead>';
             $ret .= '<tbody id="temp_closures_body">';
 
             foreach ($meetings as $meeting) {
+                $serviceBodyName = '';
+                foreach ($serviceBodies as $serviceBody) {
+                    if ($serviceBody->id == $meeting["service_body_bigint"]) {
+                        $serviceBodyName = $serviceBody->name;
+                    }
+                }
+
                 $ret .= '<tr>';
                 $ret .= '<td id="temp_closures_day"  data-order="' .$meeting['weekday_tinyint']. '">' . htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'])]) . '</td>';
                 $ret .= '<td id="temp_closures_time" data-order="' .str_replace(":", "", $meeting['start_time']) . '">' . $this->buildMeetingTime($meeting['start_time'], $in_time_format) . '</td>';
-                $ret .= '<td id="temp_closures_area">' . $this->getNameFromServiceBodyID($meeting["service_body_bigint"]) . '</td>';
+                $ret .= '<td id="temp_closures_area">' . $serviceBodyName . '</td>';
                 $ret .= '<td id="temp_closures_name">' . $meeting["meeting_name"] . '</td>';
                 $ret .= '<td id="temp_closures_address">' . $meeting["location_street"] . " " . $meeting["location_municipality"] . ", " . $meeting["location_province"] . " " . $meeting["location_postal_code_1"] . '</td>';
                 $ret .= '</tr>';
@@ -785,18 +796,6 @@ if (!class_exists("temporaryClosures")) {
             }
 
             return $time;
-        }
-
-
-        public function getNameFromServiceBodyID($serviceBodyID)
-        {
-            $bmlt_search_endpoint =  $this->get($this->options['root_server'] . "/client_interface/json/?switcher=GetServiceBodies");
-            $serviceBodies = json_decode(wp_remote_retrieve_body($bmlt_search_endpoint));
-            foreach ($serviceBodies as $serviceBody) {
-                if ($serviceBody->id == $serviceBodyID) {
-                    return $serviceBody->name;
-                }
-            }
         }
 
         public function authenticateRootServer()
