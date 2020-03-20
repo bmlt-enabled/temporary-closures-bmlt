@@ -474,7 +474,8 @@ if (!class_exists("temporaryClosures")) {
                     'unpublished'               => '',
                     'sortby'                    => 'location_municipality,weekday_tinyint,start_time',
                     'bmlt_user'                 => '',
-                    'bmlt_pass'                 => ''
+                    'bmlt_pass'                 => '',
+                    'custom_query'              => ''
                 );
                 update_option($this->optionsName, $theOptions);
             }
