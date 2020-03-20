@@ -4,7 +4,7 @@ Plugin Name: Temporary Closures BMLT
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.1.1
+Version: 1.2.0
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -101,6 +101,8 @@ if (!class_exists("temporaryClosures")) {
         public function enqueueFrontendFiles($hook)
         {
             wp_enqueue_style('temporary-closures', plugin_dir_url(__FILE__) . 'css/temporary_closures.css', false, '1.15', 'all');
+            wp_enqueue_script('datatables', '//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js', array('jquery'));
+            wp_enqueue_style('datatables-style', '//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css');
         }
 
         public function testRootServer($root_server)
@@ -182,6 +184,20 @@ if (!class_exists("temporaryClosures")) {
             if ($display_type != '' && $display_type == 'block') {
                 $output .= '<div id="temporary_closures_div">';
                 $output .= $this->meetingsJson2Html($meeting_results, true, null, $out_time_format, $days_of_the_week);
+                $output .= '</div>';
+            } else if ($display_type != '' && $display_type == 'datatables') {
+                $output .= '<script type="text/javascript">
+                        jQuery(document).ready(function(){
+                            jQuery("#temp_closures_dt").DataTable({
+                                "order": [[ 0, "asc" ]],
+                                "paging": false,
+                                "scrollY": "500px",
+                                "scrollCollapse": true,
+                                "info" : false,
+                            });
+                        });</script>';
+                $output .= '<div id="temporary_closures_div">';
+                $output .= $this->meetingsJson2DataTables($meeting_results, $out_time_format, $days_of_the_week);
                 $output .= '</div>';
             } else { // table
                 $output .= '<div id="temporary_closures_div">';
@@ -358,10 +374,17 @@ if (!class_exists("temporaryClosures")) {
                                     <?php if ($this->options['display_type_dropdown'] == 'block') { ?>
                                         <option value="table">HTML (bmlt table)</option>
                                         <option selected="selected" value="block">HTML (bmlt block)</option>
+                                        <option value="datatables">DataTables</option>
+                                        <?php
+                                    } else if ($this->options['display_type_dropdown'] == 'datatables') { ?>
+                                        <option value="table">HTML (bmlt table)</option>
+                                        <option value="block">HTML (bmlt block)</option>
+                                        <option selected="selected" value="datatables">DataTables</option>
                                         <?php
                                     } else { ?>
-                                        <option selected="selected" value="table">HTML (bmlt table)</option>
-                                        <option value="block">HTML (bmlt block)</option>
+                                    <option selected="selected" value="table">HTML (bmlt table)</option>
+                                    <option value="block">HTML (bmlt block)</option>
+                                    <option value="datatables">DataTables</option>
                                         <?php
                                     }
                                     ?>
@@ -489,6 +512,49 @@ if (!class_exists("temporaryClosures")) {
             return json_decode($body, true);
         }
 
+        /*******************************************************************/
+        /**
+         * \brief  This returns the search results in a datatable.
+         * @param $meetings
+         * @param null $in_time_format
+         * @param null $days_of_the_week
+         * @return string
+         */
+        public function meetingsJson2DataTables(
+            $meetings,                ///< The results.
+            $in_time_format = null,  // Time format
+            $days_of_the_week = null
+        ) {
+
+
+
+            $ret = '';
+            $ret .= '<table id="temp_closures_dt"  class="tem_closures_display" style="width:95%">';
+            $ret .= '<thead id="temp_closures_head">';
+            $ret .= '<tr>';
+            $ret .= '<td id="temp_closures_day_header" class="selected"><a href="#">Day</a></td>';
+            $ret .= '<td id="temp_closures_time_header"><a href="#">Time</a></td>';
+            $ret .= '<td id="temp_closures_area_header"><a href="#">Area</a></td>';
+            $ret .= '<td id="temp_closures_name_header"><a href="#">Meeting Name</a></td>';
+            $ret .= '<td id="temp_closures_address_header"><a href="#">Address</a></td>';
+            $ret .= '</tr>';
+            $ret .= '</thead>';
+            $ret .= '<tbody id="temp_closures_body">';
+
+            foreach ($meetings as $meeting) {
+                $ret .= '<tr>';
+                $ret .= '<td id="temp_closures_day"  data-order="' .$meeting['weekday_tinyint']. '">' . htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'])]) . '</td>';
+                $ret .= '<td id="temp_closures_time" data-order="' .str_replace(":", "", $meeting['start_time']) . '">' . $this->buildMeetingTime($meeting['start_time'], $in_time_format) . '</td>';
+                $ret .= '<td id="temp_closures_area">' . $this->getNameFromServiceBodyID($meeting["service_body_bigint"]) . '</td>';
+                $ret .= '<td id="temp_closures_name">' . $meeting["meeting_name"] . '</td>';
+                $ret .= '<td id="temp_closures_address">' . $meeting["location_street"] . " " . $meeting["location_municipality"] . ", " . $meeting["location_province"] . " " . $meeting["location_postal_code_1"] . '</td>';
+                $ret .= '</tr>';
+            }
+            $ret .= '</tbody>';
+            $ret .= '</table>';
+
+            return $ret;
+        }
         /*******************************************************************/
         /**
          * \brief  This returns the search results, in whatever form was requested.
@@ -719,6 +785,18 @@ if (!class_exists("temporaryClosures")) {
             }
 
             return $time;
+        }
+
+
+        public function getNameFromServiceBodyID($serviceBodyID)
+        {
+            $bmlt_search_endpoint =  $this->get($this->options['root_server'] . "/client_interface/json/?switcher=GetServiceBodies");
+            $serviceBodies = json_decode(wp_remote_retrieve_body($bmlt_search_endpoint));
+            foreach ($serviceBodies as $serviceBody) {
+                if ($serviceBody->id == $serviceBodyID) {
+                    return $serviceBody->name;
+                }
+            }
         }
 
         public function authenticateRootServer()

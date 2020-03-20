@@ -115,3 +115,43 @@ div#temporary_closures_div div.bmlt_simple_meeting_one_meeting_format_div
 div#temporary_closures_div {
 	overflow-x: auto;
 }
+
+table.dataTable tbody, thead {
+	font: normal normal normal 14px/1.3em "open sans",sans-serif;
+}
+.dataTables_wrapper .dataTables_filter {
+	float: right;
+	text-align: right;
+	padding: 6px;
+}
+table.dataTable thead {
+	color: #000;
+	background-color: #fff;
+	opacity: 0.9;
+}
+table.dataTable.display tbody tr.odd {
+	background-color: #fff;
+}
+table.dataTable.display tbody tr.odd > .sorting_1 {
+	background-color: #fff;
+}
+
+table.dataTable.display tbody tr.odd:hover {
+	background-color: #fff;
+}
+table.dataTable.display tbody tr.odd > .sorting_1:hover {
+	background-color: #fff;
+}
+
+table.dataTable.display tbody tr.even {
+	background-color: #D8F3FD;
+}
+table.dataTable.display tbody tr.even:hover {
+	background-color: #fff;
+}
+table.dataTable.display tbody tr.even > .sorting_1 {
+	background-color: #D8F3FD;
+}
+table.dataTable.display tbody tr.even > .sorting_1:hover {
+	background-color: #fff;
+}

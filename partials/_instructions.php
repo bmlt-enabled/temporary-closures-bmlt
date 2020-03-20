@@ -43,7 +43,7 @@
     <h3 class="help-accordian"><strong>&nbsp;&nbsp;&nbsp;&nbsp;- display_type</strong></h3>
     <div>
         <p><strong>display_type</strong></p>
-        <p>To change the display type add display_type="table" there are three different types <strong>simple</strong>, <strong>table</strong>, <strong>block</strong></p>
+        <p>To change the display type add display_type="table" there are three different types <strong>table</strong>, <strong>block</strong></p>, <strong>datatables</strong>
         <p>Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50&quot; display_type=&quot;table"]</p>
     </div>
     <h3 class="help-accordian"><strong>&nbsp;&nbsp;&nbsp;&nbsp;- custom_query</strong></h3>

@@ -6,7 +6,7 @@ Tags: bmlt, basic meeting list toolbox, Temporary Closures, Temporary Closures B
 Requires at least: 4.0
 Requires PHP: 5.6
 Tested up to: 5.3.2
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quo
 **services** to add multiple service bodies just separate by a comma.
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; services=&quot;50,37,26&quot;]
 
-**display_type** To change the display type add display_type=&quot;table&quot; there are three different types **table**, **block**
+**display_type** To change the display type add display_type=&quot;table&quot; there are three different types **table**, **block**, **datatables**
 Ex. [temporary_closures root_server=&quot;https://www.domain.org/main_server&quot; display_type=&quot;table&quot;]
 
 **custom_query** You can add a custom query from semantic api to filter results, for ex by format `&formats=54`.
@@ -65,6 +65,10 @@ This section describes how to install the plugin and get it working.
 1. screenshot-1.png
 
 == Changelog ==
+
+= 1.2.0 =
+
+* Added datatables to display_type, this will display data in sortable table.
 
 = 1.1.1 =
 
