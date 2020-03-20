@@ -193,7 +193,7 @@ if (!class_exists("temporaryClosures")) {
                                     search: "",
                                     searchPlaceholder: "Search Closed Meetings"
                                 },
-                                "order": [[ 0, "asc" ]],
+                                "order": [[ 0, "asc" ], [ 1, "asc" ]],
                                 "paging": false,
                                 "scrollY": "500px",
                                 "scrollCollapse": true,
