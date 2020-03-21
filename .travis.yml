@@ -63,11 +63,11 @@ jobs:
       on:
         tags: true
         condition: $TRAVIS_TAG =~ "beta"
-#    - provider: script
-#      script: ./deploy-wordpress.sh
-#      skip_cleanup: true
-#      on:
-#        tags: true
+    - provider: script
+      script: ./deploy-wordpress.sh
+      skip_cleanup: true
+      on:
+        tags: true
 notifications:
   slack:
     rooms:
