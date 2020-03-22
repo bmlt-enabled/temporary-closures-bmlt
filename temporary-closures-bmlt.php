@@ -187,8 +187,9 @@ if (!class_exists("temporaryClosures")) {
                 $output .= '</div>';
             } else if ($display_type != '' && $display_type == 'datatables') {
                 $output .= '<script type="text/javascript">
-                        jQuery(document).ready(function(){
-                            jQuery("#temp_closures_dt").DataTable({
+                        var $tc = jQuery.noConflict;
+                        jQuery(document).ready(function($tc){
+                            $tc("#temp_closures_dt").DataTable({
                                 language: {
                                     search: "",
                                     searchPlaceholder: "Search Closed Meetings"
@@ -616,8 +617,6 @@ if (!class_exists("temporaryClosures")) {
                                     $keys[] = 'unused';
                                 }
 
-                                // This is for convenience. We turn the meeting array into an associative one by adding the keys.
-                                $meeting = array_combine($keys, $meeting);
                                 $location_borough = htmlspecialchars(trim(stripslashes($meeting['location_city_subsection'])));
                                 $location_neighborhood = htmlspecialchars(trim(stripslashes($meeting['location_neighborhood'])));
                                 $location_province = htmlspecialchars(trim(stripslashes($meeting['location_province'])));
