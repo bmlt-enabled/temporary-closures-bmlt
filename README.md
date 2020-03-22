@@ -59,6 +59,11 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog
 
+### 1.2.1
+
+* Using jQuery no conflict.
+* Fixed PHP warning.
+
 ### 1.2.0
 
 * Added datatables to display_type, this will display data in sortable table.
