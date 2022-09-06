@@ -2,9 +2,10 @@
 /*
 Plugin Name: Temporary Closures BMLT
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
+Contributors: pjaudiomv, bmltenabled
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.2.1
+Version: 1.3.0
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -113,18 +114,15 @@ if (!class_exists("temporaryClosures")) {
                     'User-Agent' => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +TemporaryClosuresBMLT'
                 )
             );
-            $results = wp_remote_get("$root_server/client_interface/serverInfo.xml", $args);
+            $results = wp_remote_get("$root_server/client_interface/json/?switcher=GetServerInfo", $args);
             $httpcode = wp_remote_retrieve_response_code($results);
             $response_message = wp_remote_retrieve_response_message($results);
             if ($httpcode != 200 && $httpcode != 302 && $httpcode != 304 && ! empty($response_message)) {
                 //echo '<p>Problem Connecting to BMLT Root Server: ' . $root_server . '</p>';
                 return false;
             };
-            $results = simplexml_load_string(wp_remote_retrieve_body($results));
-            $results = json_encode($results);
-            $results = json_decode($results, true);
-            $results = $results['serverVersion']['readableString'];
-            return $results;
+            $results = json_decode(wp_remote_retrieve_body($results), true);
+            return $results[0]["version"];
         }
 
         public function temporaryClosuresMain($atts, $content = null)
@@ -781,8 +779,7 @@ if (!class_exists("temporaryClosures")) {
          * @param $time_format
          * @return string
          */
-        public function buildMeetingTime( $in_time, $time_format ///< A string. The value of the time field.
-        )
+        public function buildMeetingTime($in_time, $time_format) ///< A string. The value of the time field.
         {
 
             $time = null;
