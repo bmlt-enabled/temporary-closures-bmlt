@@ -4,7 +4,7 @@ Contributors: pjaudiomv, bmltenabled
 Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Tags: bmlt, basic meeting list toolbox, Temporary Closures, Temporary Closures BMLT, narcotics anonymous, na
 Requires at least: 4.0
-Requires PHP: 5.6
+Requires PHP: 7.2
 Tested up to: 6.0.2
 Stable tag: 1.3.0
 License: GPLv2 or later
