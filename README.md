@@ -5,7 +5,7 @@ to view published or unpublished meetings.
 
 ## Use Cases
 
-New England Region created a format `TC - Temporary Closure` and unpublished then assigned this format to all of them.
+New England region created a format `TC - Temporary Closure` and unpublished then assigned this format to all of them.
 Then we could display just the unpublished meetings with that format using the custom query Ex. `&formats=54`. New 
 England did it this way because we have some meetings that are unpublished for other reasons beside temporary closures.
 
