@@ -23,11 +23,12 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         id: install-dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: make composer
 
       - name: PHPCS checker
         id: php-codesniffer
-        run: vendor/squizlabs/php_codesniffer/bin/phpcs --warning-severity=6 --standard=PSR2 --ignore=vendor,bootstrap,database --extensions=php --report=summary ./
+        run: make lint
