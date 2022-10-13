@@ -6,7 +6,7 @@ Tags: bmlt, basic meeting list toolbox, Temporary Closures, Temporary Closures B
 Requires at least: 4.0
 Requires PHP: 7.2
 Tested up to: 6.0.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ This section describes how to install the plugin and get it working.
 1. screenshot-1.png
 
 == Changelog ==
+
+= 1.3.1 =
+
+* Fix for User-Agent issue that appears to be present on SiteGround hosted root servers.
+* Various PHP 8.1 fixes.
 
 = 1.3.0 =
 

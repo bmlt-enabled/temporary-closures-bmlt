@@ -2,32 +2,18 @@ name: 'pull-request'
 
 on:
   pull_request:
-    branches: [ 'master' ]
+    branches: [ 'main' ]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         id: code-checkout
 
       - name: Validate composer.json and composer.lock
         id: composer-validate
         run: composer validate
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-
-      - name: Install dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        id: install-dependencies
-        run: make composer
 
       - name: PHPCS checker
         id: php-codesniffer

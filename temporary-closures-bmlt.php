@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Contributors: pjaudiomv, bmltenabled
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.3.0
+Version: 1.3.1
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -22,12 +22,6 @@ if (!class_exists("temporaryClosures")) {
     {
         public $optionsName = 'temporary_closures_options';
         public $options = array();
-        const HTTP_RETRIEVE_ARGS = array(
-            'headers' => array(
-                'User-Agent' => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +TemporaryClosuresBMLT'
-            ),
-            'timeout' => 60
-        );
         public function __construct()
         {
             $this->getOptions();
@@ -108,13 +102,7 @@ if (!class_exists("temporaryClosures")) {
 
         public function testRootServer($root_server)
         {
-            $args = array(
-                'timeout' => '10',
-                'headers' => array(
-                    'User-Agent' => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +TemporaryClosuresBMLT'
-                )
-            );
-            $results = wp_remote_get("$root_server/client_interface/json/?switcher=GetServerInfo", $args);
+            $results = $this->get("$root_server/client_interface/json/?switcher=GetServerInfo");
             $httpcode = wp_remote_retrieve_response_code($results);
             $response_message = wp_remote_retrieve_response_message($results);
             if ($httpcode != 200 && $httpcode != 302 && $httpcode != 304 && ! empty($response_message)) {
@@ -122,7 +110,12 @@ if (!class_exists("temporaryClosures")) {
                 return false;
             };
             $results = json_decode(wp_remote_retrieve_body($results), true);
-            return $results[0]["version"];
+            return is_array($results) && array_key_exists("version", $results[0]) ? $results[0]["version"] : '';
+        }
+
+        public function arraySafeGet($arr, $i = 0)
+        {
+            return is_array($arr) ? $arr[$i] ?? '': '';
         }
 
         public function temporaryClosuresMain($atts, $content = null)
@@ -143,7 +136,7 @@ if (!class_exists("temporaryClosures")) {
             );
 
             $area_data_dropdown   = explode(',', $this->options['service_body_dropdown']);
-            $services_dropdown    = $area_data_dropdown[1];
+            $services_dropdown    = $this->arraySafeGet($area_data_dropdown, 1);
 
             $root_server          = ($args['root_server']       != '' ? $args['root_server']       : $this->options['root_server']);
             $services             = ($args['services']          != '' ? $args['services']          : $services_dropdown);
@@ -215,7 +208,7 @@ if (!class_exists("temporaryClosures")) {
          */
         public function getAreas($root_server)
         {
-            $results = wp_remote_get("$root_server/client_interface/json/?switcher=GetServiceBodies", temporaryClosures::HTTP_RETRIEVE_ARGS);
+            $results = $this->get("$root_server/client_interface/json/?switcher=GetServiceBodies");
             $result = json_decode(wp_remote_retrieve_body($results), true);
             if (is_wp_error($results)) {
                 echo '<div style="font-size: 20px;text-align:center;font-weight:normal;color:#F00;margin:0 auto;margin-top: 30px;"><p>Problem Connecting to BMLT Root Server</p><p>' . $root_server . '</p><p>Error: ' . $result->get_error_message() . '</p><p>Please try again later</p></div>';
@@ -308,13 +301,13 @@ if (!class_exists("temporaryClosures")) {
                                         <?php asort($unique_areas); ?>
                                         <?php foreach ($unique_areas as $key => $unique_area) { ?>
                                             <?php $area_data          = explode(',', $unique_area); ?>
-                                            <?php $area_name          = $area_data[0]; ?>
-                                            <?php $area_id            = $area_data[1]; ?>
-                                            <?php $area_parent        = $area_data[2]; ?>
-                                            <?php $area_parent_name   = $area_data[3]; ?>
+                                            <?php $area_name          = $this->arraySafeGet($area_data); ?>
+                                            <?php $area_id            = $this->arraySafeGet($area_data, 1); ?>
+                                            <?php $area_parent        = $this->arraySafeGet($area_data, 2); ?>
+                                            <?php $area_parent_name   = $this->arraySafeGet($area_data, 3); ?>
                                             <?php $option_description = $area_name . " (" . $area_id . ") " . $area_parent_name . " (" . $area_parent . ")" ?>
                                             <?php $is_data = explode(',', esc_html($this->options['service_body_dropdown'])); ?>
-                                            <?php if ($area_id == $is_data[1]) { ?>
+                                            <?php if ($area_id == $this->arraySafeGet($is_data, 1)) { ?>
                                                 <option selected="selected" value="<?php echo $unique_area; ?>"><?php echo $option_description; ?></option>
                                             <?php } else { ?>
                                                 <option value="<?php echo $unique_area; ?>"><?php echo $option_description; ?></option>
@@ -832,7 +825,7 @@ if (!class_exists("temporaryClosures")) {
             $args = array(
                 'timeout' => '120',
                 'headers' => array(
-                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0'
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0) Gecko/20100101 Firefox/105.0'
                 ),
                 'cookies' => isset($cookies) ? $cookies : null
             );
