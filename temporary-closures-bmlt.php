@@ -255,8 +255,8 @@ if (!class_exists("temporaryClosures")) {
                 }
                 $this->options['root_server']                = esc_url_raw($_POST['root_server']);
                 $this->options['service_body_dropdown']      = sanitize_text_field($_POST['service_body_dropdown']);
-                $this->options['recursive']                  = sanitize_text_field($_POST['recursive']);
-                $this->options['unpublished']                = sanitize_text_field($_POST['unpublished']);
+                $this->options['recursive']                  = sanitize_text_field($_POST['recursive']) ?? '1';
+                $this->options['unpublished']                = sanitize_text_field($_POST['unpublished']) ?? '';
                 $this->options['sortby']                     = sanitize_text_field($_POST['sortby']);
                 $this->options['bmlt_user']                  = sanitize_text_field($_POST['bmlt_user']);
                 $this->options['bmlt_pass']                  = sanitize_text_field($_POST['bmlt_pass']);
