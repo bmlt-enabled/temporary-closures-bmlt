@@ -36,7 +36,7 @@ class Shortcode
 
         $content = '<div id="temporary_closures_div">';
 
-        $meeting_results = $this->helper->getMeetingsJson($args['services'], $args['recursive'], $args['custom_query'], $args['unpublished'], $args['sortby']);
+        $meeting_results = $this->helper->getMeetingsJson($args['services'], $args['recursive'], $args['custom_query'], $args['unpublished'], $args['sortby'], $args['root_server']);
         $out_time_format = ($args['time_format'] == '24') ? 'G:i' : 'g:i a';
 
         switch ($args['display_type']) {
@@ -80,9 +80,9 @@ class Shortcode
                 'root_server'       => $this->settings->options['root_server'],
                 'services'          => $services_dropdown,
                 'recursive'         => $this->settings->options['recursive'],
-                'display_type'      => $this->settings->options['display_type'],
+                'display_type'      => $this->settings->options['display_type_dropdown'],
                 'time_format'       => $this->settings->options['time_format'],
-                'weekday_language'  => $this->settings->options['weekday_language'],
+                'weekday_language'  => $this->settings->options['weekday_language_dropdown'],
                 'unpublished'       => $this->settings->options['unpublished'],
                 'custom_query'      => $this->settings->options['custom_query'],
                 'sortby'            => $this->settings->options['sortby']

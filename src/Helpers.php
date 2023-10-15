@@ -11,6 +11,8 @@ class Helpers
         ),
         'timeout' => 601
     );
+    const MIDNIGHT = '00:00:00';
+    const NOON = '12:00:00';
 
     public static function arraySafeGet(array $array, $key, $default = null)
     {
@@ -103,19 +105,16 @@ class Helpers
      */
     public function buildMeetingTime($inputTime, $outputFormat)
     {
-        define('MIDNIGHT', '00:00:00');
-        define('NOON', '12:00:00');
-
-        if ($inputTime === MIDNIGHT && $outputFormat === 'g:i A') {
+        if ($inputTime === self::MIDNIGHT && $outputFormat === 'g:i A') {
             return htmlspecialchars('Midnight');
-        } elseif ($inputTime === NOON && $outputFormat === 'g:i A') {
+        } elseif ($inputTime === self::NOON && $outputFormat === 'g:i A') {
             return htmlspecialchars('Noon');
         } else {
             return htmlspecialchars(date($outputFormat, strtotime($inputTime)));
         }
     }
 
-    
+
     public function authenticateRootServer()
     {
         $query_string = http_build_query(array(
@@ -124,18 +123,11 @@ class Helpers
             'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
         return $this->get($this->options['root_server'] . "/local_server/server_admin/json.php?" . $query_string);
     }
-    public function requiresAuthentication()
-    {
-        if ($this->options['unpublished'] == "1") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public function getRooServerRequest($url)
+
+    public function getRootServerRequest(string $url, string $unpublishedStatus)
     {
         $cookies = null;
-        if ($this->requiresAuthentication()) {
+        if ($unpublishedStatus == "1") {
             $auth_response = $this->authenticateRootServer();
             $cookies = wp_remote_retrieve_cookies($auth_response);
         }
@@ -143,25 +135,20 @@ class Helpers
         return $this->get($url, $cookies);
     }
 
-    public function getConfiguredRootServerRequest($url)
-    {
-        return $this->getRooServerRequest($this->options['root_server'] . "/" . $url);
-    }
-
     public function get($url, $cookies = null)
     {
-        $args = array(
+        $args = [
             'timeout' => '120',
-            'headers' => array(
+            'headers' => [
                 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0) Gecko/20100101 Firefox/105.0'
-            ),
-            'cookies' => isset($cookies) ? $cookies : null
-        );
+            ],
+            'cookies' => $cookies ?? null
+        ];
 
         return wp_remote_get($url, $args);
     }
 
-    public function getMeetingsJson($services, $recursive, $custom_query, $unpublished, $sortby)
+    public function getMeetingsJson($services, $recursive, $custom_query, $unpublished, $sortby, $root_server)
     {
         if (empty($sortby)) {
             $sortby = 'location_municipality,weekday_tinyint,start_time';
@@ -171,8 +158,8 @@ class Helpers
         foreach ($serviceBodies as $serviceBody) {
             $services_query .= '&services[]=' . $serviceBody;
         }
-
-        $results = $this->getConfiguredRootServerRequest("/client_interface/json/?switcher=GetSearchResults&sort_keys=$sortby" . $services_query . $custom_query . ($recursive == "1" ? "&recursive=1" : "") . ($unpublished == "1" ? "&advanced_published=-1" : ""));
+        $url = rtrim($root_server, '/') . "/client_interface/json/?switcher=GetSearchResults&sort_keys=$sortby" . $services_query . $custom_query . ($recursive == "1" ? "&recursive=1" : "") . ($unpublished == "1" ? "&advanced_published=-1" : "");
+        $results = $this->getRootServerRequest($url, $unpublished);
         $body = wp_remote_retrieve_body($results);
 
         return json_decode($body, true);
@@ -216,7 +203,7 @@ class Helpers
             }
 
             $ret .= '<tr>';
-            $ret .= '<td id="temp_closures_day"  data-order="' . $meeting['weekday_tinyint'] . '">' . htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'])]) . '</td>';
+            $ret .= '<td id="temp_closures_day"  data-order="' . $meeting['weekday_tinyint'] . '">' . htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'] - 1)]) . '</td>';
             $ret .= '<td id="temp_closures_time" data-order="' . str_replace(":", "", $meeting['start_time']) . '">' . $this->buildMeetingTime($meeting['start_time'], $in_time_format) . '</td>';
             $ret .= '<td id="temp_closures_area">' . $serviceBodyName . '</td>';
             $ret .= '<td id="temp_closures_name">' . $meeting["meeting_name"] . '</td>';
@@ -336,7 +323,7 @@ class Helpers
                                 $town .= $town_temp;
                             }
 
-                            $weekday = htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'])]);
+                            $weekday = htmlspecialchars($days_of_the_week[intval($meeting['weekday_tinyint'] - 1)]);
                             $time = $this->buildMeetingTime($meeting['start_time'], $in_time_format);
 
                             $address = '';
