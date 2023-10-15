@@ -59,6 +59,19 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog
 
+### 1.4.0
+
+* Refactored codebase.
+
+### 1.3.1
+
+* Fix for User-Agent issue that appears to be present on SiteGround hosted root servers.
+* Various PHP 8.1 fixes.
+
+### 1.3.0
+
+* Updated version logic for BMLT 3.0.0 compatibility.
+
 ### 1.2.1
 
 * Using jQuery no conflict.
