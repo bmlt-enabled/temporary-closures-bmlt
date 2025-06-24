@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/temporary-closures-bmlt/
 Contributors: pjaudiomv, bmltenabled
 Author: pjaudiomv
 Description: Temporary Closures BMLT is a plugin that displays a list of all meetings that have temporary closures. It can be used to view published or unpublished meetings.
-Version: 1.3.1
+Version: 1.3.2
 Install: Drop this directory into the "wp-content/plugins/" directory and activate it.
 */
 /* Disallow direct access to the plugin file */
@@ -258,8 +258,6 @@ if (!class_exists("temporaryClosures")) {
                 $this->options['recursive']                  = sanitize_text_field($_POST['recursive']) ?? '1';
                 $this->options['unpublished']                = sanitize_text_field($_POST['unpublished']) ?? '';
                 $this->options['sortby']                     = sanitize_text_field($_POST['sortby']);
-                $this->options['bmlt_user']                  = sanitize_text_field($_POST['bmlt_user']);
-                $this->options['bmlt_pass']                  = sanitize_text_field($_POST['bmlt_pass']);
                 $this->options['custom_query']               = sanitize_text_field($_POST['custom_query']);
                 $this->options['display_type_dropdown']      = sanitize_text_field($_POST['display_type_dropdown']);
                 $this->options['time_format_dropdown']       = sanitize_text_field($_POST['time_format_dropdown']);
@@ -350,14 +348,6 @@ if (!class_exists("temporaryClosures")) {
                             <li>
                                 <input type="checkbox" id="unpublished" name="unpublished" value="1" <?php echo ($this->options['unpublished'] == "1" ? "checked" : "") ?>/>
                                 <label for="unpublished">Use Unpublished Meetings</label>
-                            </li>
-                            <li>
-                                <label for="bmlt_user">BMLT User: </label>
-                                <input type="text" id="bmlt_user" name="bmlt_user" value="<?php echo $this->options['bmlt_user']; ?>">
-                            </li>
-                            <li>
-                                <label for="bmlt_pass">BMLT Password: </label>
-                                <input type="password" id="bmlt_pass" name="bmlt_pass" value="<?php echo $this->options['bmlt_pass']; ?>">
                             </li>
                         </ul>
                     </div>
@@ -465,8 +455,6 @@ if (!class_exists("temporaryClosures")) {
                     'weekday_language_dropdown' => 'en',
                     'unpublished'               => '',
                     'sortby'                    => 'location_municipality,weekday_tinyint,start_time',
-                    'bmlt_user'                 => '',
-                    'bmlt_pass'                 => '',
                     'custom_query'              => ''
                 );
                 update_option($this->optionsName, $theOptions);
@@ -788,36 +776,14 @@ if (!class_exists("temporaryClosures")) {
             return $time;
         }
 
-        public function authenticateRootServer()
+        public function getRootServerRequest($url)
         {
-            $query_string = http_build_query(array(
-                'admin_action' => 'login',
-                'c_comdef_admin_login' => $this->options['bmlt_user'],
-                'c_comdef_admin_password' => $this->options['bmlt_pass'], '&'));
-            return $this->get($this->options['root_server']."/local_server/server_admin/json.php?" . $query_string);
-        }
-        public function requiresAuthentication()
-        {
-            if ($this->options['unpublished'] == "1") {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        public function getRooServerRequest($url)
-        {
-            $cookies = null;
-            if ($this->requiresAuthentication()) {
-                $auth_response = $this->authenticateRootServer();
-                $cookies = wp_remote_retrieve_cookies($auth_response);
-            }
-
-            return $this->get($url, $cookies);
+            return $this->get($url, null);
         }
 
         public function getConfiguredRootServerRequest($url)
         {
-            return $this->getRooServerRequest($this->options['root_server']."/".$url);
+            return $this->getRootServerRequest($this->options['root_server']."/".$url);
         }
 
         public function get($url, $cookies = null)
